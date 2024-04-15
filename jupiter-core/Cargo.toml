@@ -33,3 +33,4 @@ spl-associated-token-account = { workspace = true, features = [
     "no-entrypoint",
 ] }
 spl-token-2022 = { workspace = true, features = ["no-entrypoint"] }
+jupiter-interface = { path = "../../clone-protocol/sdk/jupiter-interface" }

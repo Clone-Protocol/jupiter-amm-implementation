@@ -10,6 +10,7 @@ use jupiter_core::{
     route::get_token_mints_permutations,
     test_harness::AmmTestSwapParams,
 };
+use jupiter_interface::CloneInterface;
 use solana_sdk::pubkey::Pubkey;
 use solana_sdk::{account::Account, pubkey};
 
@@ -106,12 +107,14 @@ macro_rules! test_exact_out_amms {
 
 const ORCA_V2_SOL_USDC_POOL: Pubkey = pubkey!("EGZ7tiLeH62TPV1gL8WwbXGzEPa9zmcpVnnkPKKnrE2U");
 const ORCA_V2_USDC_USDT_POOL: Pubkey = pubkey!("F13xvvx45jVGd84ynK3c8T89UejQVxjCLtmHfPmAXAHP");
+const CLONE_POOLS: Pubkey = pubkey!("5DmaSksXDg49G8586cqKjC1wd8gNVtoPmqmJeRMsQBut");
 
 // You can run a single test by doing: `cargo test test_quote_<lower_case_constant>_<default | option_name> -- --nocapture`
 
 test_exact_in_amms! {
     (ORCA_V2_SOL_USDC_POOL, SplTokenSwapAmm, 0),
     (ORCA_V2_USDC_USDT_POOL, SplTokenSwapAmm, 0),
+    (CLONE_POOLS, CloneInterface, 0),
 }
 
 async fn test_quoting_with_amm(

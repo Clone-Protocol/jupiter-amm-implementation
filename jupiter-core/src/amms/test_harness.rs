@@ -54,7 +54,7 @@ use super::loader::amm_factory;
 const JITOSOL_MINT: Pubkey = pubkey!("J1toso1uCk3RLmjorhTtrVwY9HJ7X8V9yYac6Y7kGCPn");
 
 lazy_static! {
-    pub static ref TOKEN_MINT_AND_IN_AMOUNT: [(Pubkey, u64); 5] = [
+    pub static ref TOKEN_MINT_AND_IN_AMOUNT: [(Pubkey, u64); 9] = [
         (spl_token::native_mint::ID, 25_000_000_000),
         (JITOSOL_MINT, 8_000_000_000),
         (
@@ -63,6 +63,10 @@ lazy_static! {
         ),
         (constants::USDC_MINT, 1_110_000_000),
         (constants::USDT_MINT, 1_110_000_000),
+        (pubkey!("9cMWa1wuWcio3vgEpiFg7PqKbcoafuUw5sLYFkXJ2J8M"), 1_110_000_000),
+        (pubkey!("4cwVHQtwiK7r9aAUsu4cetk1JtLWPymopWcpTSsihCdL"), 1_110_000_000),
+        (pubkey!("JzwfZvJGdsqbrKZQUvzJpWhbHcZUix7CYcCaoiNpjxg"),  1_110_000_000),
+        (pubkey!("Dd6Pde7K4J7yB691gW8K177TWd1Huy6RkfTwrbkz8Fre"), 1_110_000_000),
     ];
     pub static ref TOKEN2022_MINT_AND_IN_AMOUNT: [(Pubkey, u64); 0] = [];
     pub static ref TOKEN_MINT_TO_IN_AMOUNT: HashMap<Pubkey, u64> = {
@@ -256,12 +260,13 @@ impl AmmTestHarnessProgramTest {
             in_amount: amount,
             out_amount: amount,
             jupiter_program_id: &jupiter::ID,
+            missing_dynamic_accounts_as_default: false
         };
         let SwapAndAccountMetas {
             swap,
             account_metas,
         } = amm.get_swap_and_account_metas(&swap_params).unwrap();
-        accounts.extend(account_metas);
+        accounts.extend(account_metas.clone());
 
         let route_plan = vec![RoutePlanStep {
             input_index: 0,
@@ -828,6 +833,7 @@ impl AmmTestHarness {
                     .get(&source_mint)
                     .unwrap_or_else(|| panic!("No in amount for mint: {}", destination_mint)),
                 jupiter_program_id: &placeholder,
+                missing_dynamic_accounts_as_default: false
             })?;
 
             addresses_for_snapshot.extend(
